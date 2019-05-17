@@ -61,8 +61,9 @@ edge = cv2.Laplacian(edge, cv2.CV_8U)
 
 # ハフ変換
 
-lines = cv2.HoughLines(edge, rho= 1, theta= np.pi/180, threshold= 200);
+lines = cv2.HoughLines(edge, rho= 1, theta= np.pi/180, threshold= 80);
 
+# if lines != None:
 for line in lines:
     rho, theta = line[0]
     a = np.cos(theta)
