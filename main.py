@@ -34,7 +34,6 @@ def RGB2HSV(src):
 img1 = cv2.imread("001.jpg")
 
 hsv = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
-# hsv = RGB2HSV(img1)
 
 lower_yellow = np.array([10, 0, 0])
 upper_yellow = np.array([60, 255, 255])
@@ -54,15 +53,10 @@ noiseless = cv2.erode(noiseless, kernel)
 noiseless = cv2.dilate(noiseless, kernel)
 noiseless = cv2.dilate(noiseless, kernel)
 
-# noiseless = cv2.morphologyEx(noiseless, cv2.MORPH_CLOSE, kernel)
-# noiseless = cv2.morphologyEx(noiseless, cv2.MORPH_OPEN, kernel)
 
 # エッジ抽出
 edge = noiseless
-print(edge.dtype)
 edge = cv2.Laplacian(edge, cv2.CV_8U)
-print(edge.dtype)
-# edge = cv2.threshold(edge, 128, 255, cv2.THRESH_BINARY, None)
 
 # ハフ変換
 
