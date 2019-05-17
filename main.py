@@ -32,6 +32,7 @@ def RGB2HSV(src):
             dst[y][x] = [h * 0.5, s * 255, v * 255]
 
 img1 = cv2.imread("001.jpg")
+img1 = cv2.resize(img1, (1028, 1028));
 
 hsv = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
 
@@ -60,9 +61,10 @@ edge = cv2.Laplacian(edge, cv2.CV_8U)
 
 # ハフ変換
 
-lines = cv2.HoughLines(edge, 1, np.pi/180, 200);
+lines = cv2.HoughLines(edge, rho= 1, theta= np.pi/180, threshold= 200);
 
-for rho, theta in lines[0]:
+for line in lines:
+    rho, theta = line[0]
     a = np.cos(theta)
     b = np.sin(theta)
     x0 = a*rho
@@ -75,11 +77,9 @@ for rho, theta in lines[0]:
     cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
 
 
-cv2.imshow("in", img1)
-# cv2.imshow("out", out)
-# cv2.imshow("mask", mask)
-# cv2.imshow("noiseless", noiseless)
-cv2.imshow("edge", edge)
+
+cv2.imshow("out", img1)
+
 cv2.waitKey(0)
 
 
