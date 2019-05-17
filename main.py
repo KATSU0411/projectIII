@@ -57,10 +57,35 @@ noiseless = cv2.dilate(noiseless, kernel)
 # noiseless = cv2.morphologyEx(noiseless, cv2.MORPH_CLOSE, kernel)
 # noiseless = cv2.morphologyEx(noiseless, cv2.MORPH_OPEN, kernel)
 
+# エッジ抽出
+edge = noiseless
+print(edge.dtype)
+edge = cv2.Laplacian(edge, cv2.CV_8U)
+print(edge.dtype)
+# edge = cv2.threshold(edge, 128, 255, cv2.THRESH_BINARY, None)
+
+# ハフ変換
+
+lines = cv2.HoughLines(edge, 1, np.pi/180, 200);
+
+for rho, theta in lines[0]:
+    a = np.cos(theta)
+    b = np.sin(theta)
+    x0 = a*rho
+    y0 = b*rho
+    x1 = int(x0 + 1000*(-b))
+    y1 = int(y0 + 1000*(a))
+    x2 = int(x0 - 1000*(-b))
+    y2 = int(y0 - 1000*(a))
+
+    cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
+
+
 cv2.imshow("in", img1)
-cv2.imshow("out", out)
-cv2.imshow("mask", mask)
-cv2.imshow("noiseless", noiseless)
+# cv2.imshow("out", out)
+# cv2.imshow("mask", mask)
+# cv2.imshow("noiseless", noiseless)
+cv2.imshow("edge", edge)
 cv2.waitKey(0)
 
 
