@@ -32,7 +32,7 @@ def RGB2HSV(src):
             # Hを0～179, SとVを0～255の範囲の値に変換
             dst[y][x] = [h * 0.5, s * 255, v * 255]
 
-img1 = cv2.imread("004.jpg")
+img1 = cv2.imread("001.jpg")
 img1 = cv2.resize(img1, (1028, 1028));
 
 hsv = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
@@ -71,6 +71,10 @@ flg = False
 if lines is not None:
     for i in range(len(lines)):
         rho, theta = lines[i][0]
+        if rho < 0:
+            theta = math.pi - theta
+            rho *= -1
+        print([rho, theta])
         a = np.cos(theta)
         b = np.sin(theta)
         x0 = a*rho
@@ -83,9 +87,10 @@ if lines is not None:
         cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
 
         for k in range(len(lines)):
-            _, theta2 = lines[k][0]
+            rho1, theta2 = lines[k][0]
+            if rho1 < 0:
+                theta2 = math.pi - theta2
             dif = abs(theta - theta2) % (math.pi)
-            print(dif)
             if dif > math.pi/3 and dif < math.pi*2/3:
                 flg = True
 
