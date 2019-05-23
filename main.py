@@ -36,8 +36,8 @@ img1 = cv2.resize(img1, (1028, 1028));
 
 hsv = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
 
-lower_yellow = np.array([10, 0, 0])
-upper_yellow = np.array([60, 255, 255])
+lower_yellow = np.array([15, 0, 0])
+upper_yellow = np.array([50, 255, 255])
 
 mask = cv2.inRange(hsv, lower_yellow, upper_yellow)
 out = cv2.bitwise_and(img1, img1, mask= mask)
@@ -63,23 +63,26 @@ edge = cv2.Laplacian(edge, cv2.CV_8U)
 
 lines = cv2.HoughLines(edge, rho= 1, theta= np.pi/180, threshold= 80);
 
-# if lines != None:
-for line in lines:
-    rho, theta = line[0]
-    a = np.cos(theta)
-    b = np.sin(theta)
-    x0 = a*rho
-    y0 = b*rho
-    x1 = int(x0 + 1000*(-b))
-    y1 = int(y0 + 1000*(a))
-    x2 = int(x0 - 1000*(-b))
-    y2 = int(y0 - 1000*(a))
+if lines is not None:
+    for line in lines:
+        print(line)
+        rho, theta = line[0]
+        a = np.cos(theta)
+        b = np.sin(theta)
+        x0 = a*rho
+        y0 = b*rho
+        x1 = int(x0 + 1*(-b))
+        y1 = int(y0 + 1*(a))
+        x2 = int(x0 - 1*(-b))
+        y2 = int(y0 - 1*(a))
 
-    cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
+        cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
 
 
 
 cv2.imshow("out", img1)
+cv2.imshow("out1", mask)
+cv2.imshow("noise", noiseless)
 
 cv2.waitKey(0)
 
