@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 
 def RGB2HSV(src):
@@ -31,7 +32,7 @@ def RGB2HSV(src):
             # Hを0～179, SとVを0～255の範囲の値に変換
             dst[y][x] = [h * 0.5, s * 255, v * 255]
 
-img1 = cv2.imread("001.jpg")
+img1 = cv2.imread("004.jpg")
 img1 = cv2.resize(img1, (1028, 1028));
 
 hsv = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
@@ -63,22 +64,33 @@ edge = cv2.Laplacian(edge, cv2.CV_8U)
 
 lines = cv2.HoughLines(edge, rho= 1, theta= np.pi/180, threshold= 80);
 
+
+
+flg = False
+
 if lines is not None:
-    for line in lines:
-        print(line)
-        rho, theta = line[0]
+    for i in range(len(lines)):
+        rho, theta = lines[i][0]
         a = np.cos(theta)
         b = np.sin(theta)
         x0 = a*rho
         y0 = b*rho
-        x1 = int(x0 + 1*(-b))
-        y1 = int(y0 + 1*(a))
-        x2 = int(x0 - 1*(-b))
-        y2 = int(y0 - 1*(a))
+        x1 = int(x0 + 1000*(-b))
+        y1 = int(y0 + 1000*(a))
+        x2 = int(x0 - 1000*(-b))
+        y2 = int(y0 - 1000*(a))
 
         cv2.line(img1, (x1,y1), (x2,y2), (0,0,255), 2)
 
+        for k in range(len(lines)):
+            _, theta2 = lines[k][0]
+            dif = abs(theta - theta2) % (math.pi)
+            print(dif)
+            if dif > math.pi/3 and dif < math.pi*2/3:
+                flg = True
 
+
+print(flg)
 
 cv2.imshow("out", img1)
 cv2.imshow("out1", mask)
